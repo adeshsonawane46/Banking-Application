@@ -9,19 +9,21 @@ public class TransactionRepository {
 		
 		String query = "INSERT INTO transactions(type,account_number,amount,target_account)VALUES(?,?,?,?)";
 		
-		try(Connection con = DBConnection.getConnection();
-			PreparedStatement pstmt= con.prepareStatement(query);)
-		{	
-			 pstmt.setString(1, type);
-			 pstmt.setString(2, accNo);
-			 pstmt.setDouble(3, amount);
-			 pstmt.setString(4, targetAcc);
-			
-			 pstmt.executeUpdate();
-		}
-		catch(Exception e) {
-			System.out.println(e.getMessage());
-		}
+		// TODO: Enable when MySQL DB is set up
+		// try(Connection con = DBConnection.getConnection();
+		// 	PreparedStatement pstmt= con.prepareStatement(query);)
+		// {	
+		// 	 pstmt.setString(1, type);
+		// 	 pstmt.setString(2, accNo);
+		// 	 pstmt.setDouble(3, amount);
+		// 	 pstmt.setString(4, targetAcc);
+		// 	
+		// 	 pstmt.executeUpdate();
+		// }
+		// catch(Exception e) {
+		// 	logger.error("Transaction log failed", e);
+		// }
+		// In-memory logging only for now
 	}
 
 }

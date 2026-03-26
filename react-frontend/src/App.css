@@ -1,0 +1,163 @@
+/* 🔷 ROOT THEME (IMPORTANT UPGRADE) */
+:root {
+  --bank-blue: #1e40af;
+  --bank-indigo: #4f46e5;
+  --bank-green: #059669;
+  --bank-red: #dc2626;
+  --bank-gold: #f59e0b;
+  --bg-light: #f8fafc;
+}
+
+/* RESET */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #eef2ff, #f0fdf4);
+  font-family: 'Inter', sans-serif;
+}
+
+/* 💳 CARD */
+.card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 1.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+/* 🔘 BUTTONS */
+.btn {
+  background: linear-gradient(45deg, var(--bank-blue), var(--bank-indigo));
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: 0.85rem;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+/* Variants */
+.btn-success {
+  background: linear-gradient(45deg, #16a34a, #22c55e);
+}
+
+.btn-danger {
+  background: linear-gradient(45deg, #dc2626, #ef4444);
+}
+
+.btn-purple {
+  background: linear-gradient(45deg, #7c3aed, #a855f7);
+}
+
+/* 🧾 FORM */
+.form-group label {
+  font-weight: 500;
+  color: #334155;
+  margin-bottom: 6px;
+  display: block;
+  font-size: 0.9rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #cbd5f5;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--bank-indigo);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* ✅ ALERTS */
+.error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  padding: 0.75rem;
+  border-radius: 10px;
+}
+
+.success {
+  background: #ecfdf5;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  padding: 0.75rem;
+  border-radius: 10px;
+}
+
+/* 🧾 GRID */
+.account-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* 💰 BALANCE TEXT */
+.hero-balance {
+  font-size: 2.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--bank-blue), var(--bank-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 🔄 LOADING */
+.loading-spinner {
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid var(--bank-indigo);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* 🔗 NAV */
+.nav-link {
+  position: relative;
+  color: #334155;
+  font-weight: 500;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--bank-indigo);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}

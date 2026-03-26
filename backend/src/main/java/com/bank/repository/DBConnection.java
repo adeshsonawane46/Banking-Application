@@ -10,17 +10,14 @@ public static Connection getConnection(){
 		
 		Connection con = null;
 		
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/BankingApplication", "root", "root");
-			
-		} catch (ClassNotFoundException | SQLException e) {
-			 
-			System.out.println(e.getMessage());
-		}
-		
-		return con;
-		
+		// TODO: Enable when MySQL DB is set up
+		// try {
+		// 	Class.forName("com.mysql.cj.jdbc.Driver");
+		// 	con = DriverManager.getConnection("jdbc:mysql://localhost:3306/BankingApplication", "root", "root");
+		// } catch (ClassNotFoundException | SQLException e) {
+		// 	 logger.error("DB connection failed", e);
+		// }
+		return null; // Use in-memory for now
 	}
 
 }

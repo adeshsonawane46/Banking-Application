@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import org.slf4j.LoggerFactory;
 
 public class FileReportUtil {
 	
@@ -23,9 +24,7 @@ public class FileReportUtil {
 			bw.newLine();
 		}
 		catch(IOException e) {
-			System.out.println(e.getMessage());
+			LoggerFactory.getLogger(FileReportUtil.class).error("File report write failed", e);
 		}
 	}
-	
-
 }

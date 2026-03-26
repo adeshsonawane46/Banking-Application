@@ -3,6 +3,9 @@ package com.bank;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bank.exceptions.AccountNotFoundException;
 import com.bank.exceptions.InsufficientBalanceException;
 import com.bank.exceptions.InvalidAmountException;
@@ -14,6 +17,7 @@ import com.bank.service.AlertService;
 import com.bank.service.TransactionService;
 
 public class BankingFinalTest {
+	private static final Logger logger = LoggerFactory.getLogger(BankingFinalTest.class);
 
 	public static void main(String[] args) {
 		
@@ -25,120 +29,114 @@ public class BankingFinalTest {
 		AlertService alertService = new AlertService(new BigDecimal("1000"));
 		TransactionService trxService = new TransactionService(accService, trxRepo, alertService);
 		
-		System.out.println("===========================================================================");
-		System.out.println("WELCOME TO OUR BANKING APPLICATION");
-		System.out.println("===========================================================================");
+		logger.info("===========================================================================");
+		logger.info("WELCOME TO OUR BANKING APPLICATION");
+		logger.info("===========================================================================");
 		
 		boolean running = true;
 		
 		while(running) {
 			
-			System.out.println("\nChoose an option");
-			System.out.println("1. Create Account");
-			System.out.println("2. Deposite Money");
-			System.out.println("3. Withdraw Money");
-			System.out.println("4. Transfer Money");
-			System.out.println("5  Show Account Details");
-			System.out.println("6. List All Accounts");
-			System.out.println("7. Exit");
+			logger.info("\nChoose an option");
+			logger.info("1. Create Account");
+			logger.info("2. Deposit Money");
+			logger.info("3. Withdraw Money");
+			logger.info("4. Transfer Money");
+			logger.info("5. Show Account Details");
+			logger.info("6. List All Accounts");
+			logger.info("7. Exit");
 			
-			System.out.println("Enter Choice: ");
-			int choice = sc.nextInt();
-			sc.nextLine();
+			logger.info("Enter Choice: ");
+			String choiceStr = sc.nextLine().trim();
+			int choice = Integer.parseInt(choiceStr);
 			switch(choice) {
 				case 1:
-					System.out.println("Enter name: ");
-					String name = sc.nextLine();
-					System.out.println("Enter email: ");
-					String email = sc.nextLine();
-					System.out.println("Enter Opening Balance");
-					BigDecimal openingBalance = sc.nextBigDecimal();
+					logger.info("Enter name: ");
+					String name = sc.nextLine().trim();
+					logger.info("Enter email: ");
+					String email = sc.nextLine().trim();
+					logger.info("Enter Opening Balance: ");
+					BigDecimal openingBalance = new BigDecimal(sc.nextLine().trim());
 					try {
 						Account acc = accService.createAccount(name, email, openingBalance);
-						System.out.println("Account created Successfully..! "+acc.getAccountNumber());
+						logger.info("Account created successfully! Account Number: {}", acc.getAccountNumber());
 					} catch (InvalidAmountException e) {
-						 
-						e.printStackTrace();
+						logger.error("Invalid amount for account creation: {}", e.getMessage());
 					}
 					break;
 				
 				case 2:
-					System.out.println("Enter Account Number..!");
-					String deptAcc = sc.nextLine();
-					System.out.println("Enter the Amount to Deposite..!");
-					BigDecimal deptAmount = sc.nextBigDecimal();
+					logger.info("Enter Account Number: ");
+					String deptAcc = sc.nextLine().trim();
+					logger.info("Enter the Amount to Deposit: ");
+					BigDecimal deptAmount = new BigDecimal(sc.nextLine().trim());
 					try {
 						trxService.deposite(deptAcc, deptAmount);
-						System.out.println("Deposite Successfull");
+						logger.info("Deposit successful");
 					} catch (AccountNotFoundException | InvalidAmountException e) {
-						 
-						e.printStackTrace();
+						logger.error("Deposit failed: {}", e.getMessage());
 					}
 					break;
 					
 				case 3:
-					System.out.println("Enter Account Number..!");
-					String withAcc = sc.nextLine();
-					System.out.println("Enter the Amount to Deposite..!");
-					BigDecimal withAmt = sc.nextBigDecimal();
+					logger.info("Enter Account Number: ");
+					String withAcc = sc.nextLine().trim();
+					logger.info("Enter the Amount to Withdraw: ");
+					BigDecimal withAmt = new BigDecimal(sc.nextLine().trim());
 					try {
 						trxService.withdraw(withAcc, withAmt);
-						System.out.println("Withdraw Successfull");
+						logger.info("Withdraw successful");
 					} catch (AccountNotFoundException | InvalidAmountException | InsufficientBalanceException e) {
-						
-						e.printStackTrace();
+						logger.error("Withdraw failed: {}", e.getMessage());
 					}
 					break;
 					
-				
 				case 4:
-					System.out.println("Enter Sender Account Number..!");
-					String sender = sc.nextLine();
-					System.out.println("Enter Recevier Account Number..!");
-					String receiver = sc.nextLine();
-					System.out.println("Enter Amount for transfer..!");
-					BigDecimal tAmt = sc.nextBigDecimal();
+					logger.info("Enter Sender Account Number: ");
+					String sender = sc.nextLine().trim();
+					logger.info("Enter Receiver Account Number: ");
+					String receiver = sc.nextLine().trim();
+					logger.info("Enter Amount for transfer: ");
+					BigDecimal tAmt = new BigDecimal(sc.nextLine().trim());
 					try {
 						trxService.transfer(sender, receiver, tAmt);
-						System.out.println("Transfer Successfull");
+						logger.info("Transfer successful");
 					} catch (InvalidAmountException | AccountNotFoundException | InsufficientBalanceException e) {
-						 
-						e.printStackTrace();
+						logger.error("Transfer failed: {}", e.getMessage());
 					}
 					break;
 					
 				case 5:
-					System.out.println("Enter Account Number to get Details..!");
-					String accNo = sc.nextLine();
+					logger.info("Enter Account Number to get Details: ");
+					String accNo = sc.nextLine().trim();
 					try {
 						Account account = accService.getAccount(accNo);
-						System.out.println("Account Details: "+account);
+						logger.info("Account Details: {}", account);
 					} catch (AccountNotFoundException e) {
-						 
-						e.printStackTrace();
+						logger.error("Account not found: {}", e.getMessage());
 					}
 					break;
 					
 				case 6:
-					System.out.println("Listing All the Accounts..!");
+					logger.info("Listing All the Accounts..!");
 					for(Account account : accService.listAllAccounts()) {
-						System.out.println(account);
+						logger.info("Account: {}", account);
 					}
 					break;
 					
 				case 7: 
-					System.out.println("Thank you for using for our Banking Application..!");
+					logger.info("Thank you for using our Banking Application!");
 					running = false;
 					break;
 					
 				default:
-					System.out.println("Invalid Choice. Please Try Again..!");
+					logger.error("Invalid Choice. Please Try Again!");
 					
 			}
 			
-		}
-	
+		}	
 
 	}
 
 }
+
