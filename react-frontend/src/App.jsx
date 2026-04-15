@@ -1,106 +1,114 @@
-import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, NavLink, useNavigate, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Dashboard from './components/Dashboard';
 import AccountForm from './components/AccountForm';
 import TxForm from './components/TxForm';
 import TransferForm from './components/TransferForm';
 import AccountDetail from './components/AccountDetail';
+import Login from './components/Login';
+import Signup from './components/Signup';
 import './App.css';
 
+// 🔐 Protected Route
+function ProtectedRoute({ children, token }) {
+  return token ? children : <Navigate to="/" replace />;
+}
+
+// 🔷 Navbar
+function Navbar({ token, setToken }) {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+    navigate("/");
+  };
+
+  return (
+    <nav className="bg-white shadow-md p-4 flex justify-between">
+      <h1 className="font-bold text-xl">🏦 BankPro</h1>
+
+      <div className="flex gap-4">
+        {!token ? (
+          <>
+            <Link to="/">Login</Link>
+            <Link to="/signup">Signup</Link>
+          </>
+        ) : (
+          <>
+            <NavLink to="/dashboard">Dashboard</NavLink>
+            <NavLink to="/create">Create</NavLink>
+            <NavLink to="/deposit">Deposit</NavLink>
+            <NavLink to="/withdraw">Withdraw</NavLink>
+            <NavLink to="/transfer">Transfer</NavLink>
+
+            <button onClick={handleLogout}>Logout</button>
+          </>
+        )}
+      </div>
+    </nav>
+  );
+}
+
+// 🔷 App
 function App() {
+
+  const [token, setToken] = useState(null);
+
+  // 🔥 Sync token with localStorage (CRITICAL FIX)
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
+  }, []);
+
   return (
     <Router>
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-green-50">
+      <Navbar token={token} setToken={setToken} />
 
-        {/* 🔷 NAVBAR */}
-        <nav className="bg-white/80 backdrop-blur-lg shadow-md border-b border-gray-200 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
+      <Routes>
 
-              {/* Logo */}
-              <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-bold shadow">
-                  🏦
-                </div>
-                <Link to="/" className="text-xl font-bold text-gray-800">
-                  BankPro
-                </Link>
-              </div>
+        {/* PUBLIC */}
+        <Route path="/" element={<Login setToken={setToken} />} />
+        <Route path="/signup" element={<Signup />} />
 
-              {/* Links */}
-              <div className="hidden md:flex items-center space-x-6">
-                <NavLink 
-                  to="/" 
-                  className={({ isActive }) =>
-                    `nav-link px-3 py-2 rounded-lg text-sm font-medium transition ${
-                      isActive ? 'text-indigo-600 font-semibold' : 'text-gray-600 hover:text-indigo-600'
-                    }`
-                  }
-                >
-                  Dashboard
-                </NavLink>
+        {/* PROTECTED */}
+        <Route path="/dashboard" element={
+          <ProtectedRoute token={token}>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
 
-                <NavLink 
-                  to="/create" 
-                  className={({ isActive }) =>
-                    `nav-link px-3 py-2 rounded-lg text-sm font-medium transition ${
-                      isActive ? 'text-indigo-600 font-semibold' : 'text-gray-600 hover:text-indigo-600'
-                    }`
-                  }
-                >
-                  Create
-                </NavLink>
+        <Route path="/create" element={
+          <ProtectedRoute token={token}>
+            <AccountForm />
+          </ProtectedRoute>
+        } />
 
-                <NavLink 
-                  to="/deposit" 
-                  className={({ isActive }) =>
-                    `nav-link px-3 py-2 rounded-lg text-sm font-medium transition ${
-                      isActive ? 'text-green-600 font-semibold' : 'text-gray-600 hover:text-green-600'
-                    }`
-                  }
-                >
-                  Deposit
-                </NavLink>
+        <Route path="/deposit" element={
+          <ProtectedRoute token={token}>
+            <TxForm />
+          </ProtectedRoute>
+        } />
 
-                <NavLink 
-                  to="/withdraw" 
-                  className={({ isActive }) =>
-                    `nav-link px-3 py-2 rounded-lg text-sm font-medium transition ${
-                      isActive ? 'text-red-500 font-semibold' : 'text-gray-600 hover:text-red-500'
-                    }`
-                  }
-                >
-                  Withdraw
-                </NavLink>
+        <Route path="/withdraw" element={
+          <ProtectedRoute token={token}>
+            <TxForm />
+          </ProtectedRoute>
+        } />
 
-                <NavLink 
-                  to="/transfer" 
-                  className={({ isActive }) =>
-                    `nav-link px-3 py-2 rounded-lg text-sm font-medium transition ${
-                      isActive ? 'text-purple-600 font-semibold' : 'text-gray-600 hover:text-purple-600'
-                    }`
-                  }
-                >
-                  Transfer
-                </NavLink>
-              </div>
+        <Route path="/transfer" element={
+          <ProtectedRoute token={token}>
+            <TransferForm />
+          </ProtectedRoute>
+        } />
 
-            </div>
-          </div>
-        </nav>
+        <Route path="/account/:accNo" element={
+          <ProtectedRoute token={token}>
+            <AccountDetail />
+          </ProtectedRoute>
+        } />
 
-        {/* 🔷 MAIN CONTENT */}
-        <main className="max-w-7xl mx-auto py-8 px-4 lg:px-6">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/create" element={<AccountForm />} />
-            <Route path="/deposit" element={<TxForm />} />
-            <Route path="/withdraw" element={<TxForm />} />
-            <Route path="/transfer" element={<TransferForm />} />
-            <Route path="/account/:accNo" element={<AccountDetail />} />
-          </Routes>
-        </main>
-
-      </div>
+      </Routes>
     </Router>
   );
 }

@@ -5,19 +5,21 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-	
-public static Connection getConnection(){
-		
-		Connection con = null;
-		
-		// TODO: Enable when MySQL DB is set up
-		// try {
-		// 	Class.forName("com.mysql.cj.jdbc.Driver");
-		// 	con = DriverManager.getConnection("jdbc:mysql://localhost:3306/BankingApplication", "root", "root");
-		// } catch (ClassNotFoundException | SQLException e) {
-		// 	 logger.error("DB connection failed", e);
-		// }
-		return null; // Use in-memory for now
-	}
 
+    public static Connection getConnection() {
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            return DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/banking_app",
+                    "root",
+                    "adesh@123"   
+            );
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Database connection failed ❌");
+        }
+    }
 }
